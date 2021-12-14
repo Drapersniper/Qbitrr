@@ -3,7 +3,6 @@ from __future__ import annotations
 import contextlib
 import pathlib
 import re
-import shutil
 import sys
 import time
 from collections import defaultdict
@@ -1324,7 +1323,7 @@ class Arr:
 
     def file_is_probeable(self, file: pathlib.Path) -> bool:
         if not self.manager.ffprobe_available:
-            return True  # ffprobe is not in PATH, so we say every file is acceptable.
+            return True  # ffprobe is not found, so we say every file is acceptable.
         try:
             if file in self.files_probed:
                 self.logger.trace("Probeable: File has already been probed: {file}", file=file)
@@ -1332,7 +1331,9 @@ class Arr:
             if file.is_dir():
                 self.logger.trace("Not Probeable: File is a directory: {file}", file=file)
                 return False
-            output = ffmpeg.probe(str(file.absolute()))
+            output = ffmpeg.probe(
+                str(file.absolute()), cmd=self.manager.qbit_manager.ffmpeg_downloader.probe
+            )
             if not output:
                 self.logger.trace("Not Probeable: Probe returned no output: {file}", file=file)
                 return False
@@ -1619,7 +1620,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -1635,7 +1638,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -1651,7 +1656,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -1669,7 +1676,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -1686,7 +1695,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -1708,7 +1719,9 @@ class Arr:
                             torrent=torrent,
                             progress=round(torrent.progress * 100, 2),
                             availability=round(torrent.availability * 100, 2),
-                            added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                            added=datetime.fromtimestamp(
+                                self.recently_queue.get(torrent.hash, torrent.added_on)
+                            ),
                             timedelta=timedelta(seconds=torrent.eta),
                             last_activity=datetime.fromtimestamp(torrent.last_activity),
                         )
@@ -1732,7 +1745,9 @@ class Arr:
                             torrent=torrent,
                             progress=round(torrent.progress * 100, 2),
                             availability=round(torrent.availability * 100, 2),
-                            added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                            added=datetime.fromtimestamp(
+                                self.recently_queue.get(torrent.hash, torrent.added_on)
+                            ),
                             timedelta=timedelta(seconds=torrent.eta),
                             last_activity=datetime.fromtimestamp(torrent.last_activity),
                         )
@@ -1747,7 +1762,9 @@ class Arr:
                             torrent=torrent,
                             progress=round(torrent.progress * 100, 2),
                             availability=round(torrent.availability * 100, 2),
-                            added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                            added=datetime.fromtimestamp(
+                                self.recently_queue.get(torrent.hash, torrent.added_on)
+                            ),
                             timedelta=timedelta(seconds=torrent.eta),
                             last_activity=datetime.fromtimestamp(torrent.last_activity),
                         )
@@ -1768,7 +1785,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -1786,7 +1805,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -1802,7 +1823,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -1894,7 +1917,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -1917,7 +1942,9 @@ class Arr:
                             torrent=torrent,
                             progress=round(torrent.progress * 100, 2),
                             availability=round(torrent.availability * 100, 2),
-                            added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                            added=datetime.fromtimestamp(
+                                self.recently_queue.get(torrent.hash, torrent.added_on)
+                            ),
                             timedelta=timedelta(seconds=torrent.eta),
                             last_activity=datetime.fromtimestamp(torrent.last_activity),
                         )
@@ -1933,7 +1960,9 @@ class Arr:
                                 torrent=torrent,
                                 progress=round(torrent.progress * 100, 2),
                                 availability=round(torrent.availability * 100, 2),
-                                added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                                added=datetime.fromtimestamp(
+                                    self.recently_queue.get(torrent.hash, torrent.added_on)
+                                ),
                                 timedelta=timedelta(seconds=torrent.eta),
                                 last_activity=datetime.fromtimestamp(torrent.last_activity),
                             )
@@ -2000,7 +2029,9 @@ class Arr:
                                     torrent=torrent,
                                     progress=round(torrent.progress * 100, 2),
                                     availability=round(torrent.availability * 100, 2),
-                                    added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                                    added=datetime.fromtimestamp(
+                                        self.recently_queue.get(torrent.hash, torrent.added_on)
+                                    ),
                                     timedelta=timedelta(seconds=torrent.eta),
                                     last_activity=datetime.fromtimestamp(torrent.last_activity),
                                 )
@@ -2022,7 +2053,9 @@ class Arr:
                         torrent=torrent,
                         progress=round(torrent.progress * 100, 2),
                         availability=round(torrent.availability * 100, 2),
-                        added=datetime.fromtimestamp(self.recently_queue.get(torrent.hash, torrent.added_on)),
+                        added=datetime.fromtimestamp(
+                            self.recently_queue.get(torrent.hash, torrent.added_on)
+                        ),
                         timedelta=timedelta(seconds=torrent.eta),
                         last_activity=datetime.fromtimestamp(torrent.last_activity),
                     )
@@ -2560,13 +2593,14 @@ class ArrManager:
 
         self.completed_folders: Set[pathlib.Path] = set()
         self.managed_objects: Dict[str, Arr] = {}
-        self.ffprobe_available: bool = bool(shutil.which("ffprobe"))
         self.qbit: qbittorrentapi.Client = qbitmanager.client
         self.qbit_manager: qBitManager = qbitmanager
+        self.ffprobe_available: bool = self.qbit_manager.ffprobe_downloader.probe_path.exists()
         self.logger = logger
         if not self.ffprobe_available:
             self.logger.error(
-                "ffprobe was not found in your PATH, disabling all functionality dependant on it."
+                "'{ffprobe}' was not found, disabling all functionality dependant on it",
+                ffprobe=self.qbit_manager.ffprobe_downloader.probe_path,
             )
 
     def build_arr_instances(self):
