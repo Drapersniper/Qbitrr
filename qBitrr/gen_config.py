@@ -729,12 +729,17 @@ class MyConfig:
         return values if values is not ... else default
 
 
-def _write_config_file():
+def _write_config_file(docker=False) -> pathlib.Path:
     doc = generate_doc()
-    CONFIG_FILE = HOME_PATH.joinpath(".config", "qBitManager", "config.toml")
-    if CONFIG_FILE.exists():
+    if docker:
+        file_name = "config.rename_me.toml"
+    else:
+        file_name = "config.toml"
+    CONFIG_FILE = HOME_PATH.joinpath(".config", "qBitManager", file_name)
+    if CONFIG_FILE.exists() and not docker:
         print(f"{CONFIG_FILE} already exists, File is not being replaced.")
         CONFIG_FILE = pathlib.Path.cwd().joinpath("config_new.toml")
     config = MyConfig(CONFIG_FILE, config=doc)
     config.save()
     print(f'New config file has been saved to "{CONFIG_FILE}"')
+    return CONFIG_FILE
