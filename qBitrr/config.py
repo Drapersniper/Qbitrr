@@ -8,8 +8,9 @@ import sys
 
 from qBitrr.bundled_data import license_text, patched_version
 from qBitrr.gen_config import MyConfig, generate_doc
+from qBitrr.home_path import HOME_PATH
 
-APPDATA_FOLDER = pathlib.Path().home().joinpath(".config", "qBitManager")
+APPDATA_FOLDER = HOME_PATH.joinpath(".config", "qBitManager")
 APPDATA_FOLDER.mkdir(parents=True, exist_ok=True)
 
 
