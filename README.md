@@ -114,3 +114,35 @@ services:
 - The script will always expect a completed config.toml file
 - When you first start the container a "config.rename_me.toml" will be added to `/path/to/appdata/qbitrr`
   - Make sure to rename it to 'config.toml' then edit it to your desired values
+
+
+##### Example Docker compose
+```yaml
+version: "3"
+
+services:
+  qbitrr-main:
+    container_name: qbitrr
+    hostname: qbitrr
+    restart: unless-stopped
+    image: drapersniper/qbitrr:latest
+    user: 1000:1000 # Required to ensure teh container is run as the user who has perms to see the 2 mount points and the ability to write to the CompletedDownloadFolder mount
+    networks:
+      default:
+        ipv4_address: 172.168.101.200
+    volumes:
+      - /home/draper/docker-compose/server/data/qbitrr/main:/config/.config/qBitManager # This is there all the qBitrr appdata is stored (Instance DB etc)
+      - /mount/to/completed/download/folder/for/scanning:/mount/to/completed/download/folder/for/scanning:rw # This is used in the CompletedDownloadFolder config key
+      - /path/do/db/folder/arrs:/mount/path/to/arr/db/folder:ro #Used for the config key DatabaseFile
+    logging: # Not needed but ensure logging for container doesn't balloon
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: 3
+    depends_on: # Not needed but this ensures qBitrr only starts if the dependencies are up and running
+      - qbittorrent
+      - radarr-1080p
+      - sonarr-1080p
+      - animarr-1080p
+      - overseerr
+```

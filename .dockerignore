@@ -7,7 +7,6 @@
 .grenrc.yml
 .pre-commit-config.yaml
 
-config.example.toml
 CHANGELOG.md
 README.md
 

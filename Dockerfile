@@ -10,7 +10,9 @@ ENV QBITRR_DOCKER_RUNNING=69420
 
 COPY . /app
 
-RUN python -m pip install -r /app/requirements.extras.txt -r /app/requirements.txt && python /app/setup.py install
+WORKDIR /app/
+
+RUN python -m pip install -e .[ujson]
 
 WORKDIR /config
 
