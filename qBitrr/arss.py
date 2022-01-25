@@ -3222,10 +3222,12 @@ class ArrManager:
 
     def build_arr_instances(self):
         for key in CONFIG.sections():
-            if search := re.match("(rad|son)arr.*", key, re.IGNORECASE):
+            if search := re.match("(rad|son|anim)arr.*", key, re.IGNORECASE):
                 name = search.group(0)
                 match = search.group(1)
                 if match.lower() == "son":
+                    call_cls = SonarrAPI
+                elif match.lower() == "anim":
                     call_cls = SonarrAPI
                 elif match.lower() == "rad":
                     call_cls = RadarrAPI
