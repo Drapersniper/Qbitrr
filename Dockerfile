@@ -1,6 +1,6 @@
 # Pin Python to the latest supported version
 # (This avoid it auto updating to a higher untested version)
-FROM python:3.10
+FROM pypy:3.8-7.3.7
 
 LABEL Maintainer="Draper"
 
@@ -12,8 +12,13 @@ COPY . /app
 
 WORKDIR /app/
 
-RUN python -m pip install -e .[ujson]
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN pypy -m ensurepip --default-pip && \
+    pip install -U pip wheel && \
+    pip install -e .
 
 WORKDIR /config
 
-ENTRYPOINT ["python", "-m", "qBitrr.main"]
+ENTRYPOINT ["pypy", "-m", "qBitrr.main"]
