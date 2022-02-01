@@ -12,7 +12,7 @@ ENV QBITRR_DOCKER_RUNNING=69420
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN pip install --quiet -U pip==21.3.1 wheel
+RUN pip install --quiet -U pip wheel
 WORKDIR /app
 ADD ./requirements.fast.txt /app/requirements.fast.txt
 RUN pip install --quiet -r requirements.fast.txt
