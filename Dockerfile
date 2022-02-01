@@ -21,4 +21,4 @@ RUN pip install --quiet .
 
 WORKDIR /config
 
-ENTRYPOINT ["pypy", "-m", "qBitrr.main"]
+ENTRYPOINT ["python", "-m", "qBitrr.main"]
