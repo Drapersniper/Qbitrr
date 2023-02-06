@@ -1294,7 +1294,6 @@ class Arr:
         self.logger.trace(f"Started updating database")
         self.db_update_todays_releases()
         with self.db.atomic():
-
             if self.type == "sonarr":
                 if not self.series_search:
                     _series = set()
@@ -1325,7 +1324,6 @@ class Arr:
                     for series in self.model_arr_series_file.select().order_by(
                         self.model_arr_series_file.Added.desc()
                     ):
-
                         self.db_update_single_series(db_entry=series, series=True)
             elif self.type == "radarr":
                 for series in (
